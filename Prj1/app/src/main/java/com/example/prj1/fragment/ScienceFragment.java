@@ -1,14 +1,19 @@
 package com.example.prj1.fragment;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -27,6 +32,7 @@ public class ScienceFragment extends Fragment {
     boolean flag = true;
     public String input ;
     private TextView SCResult ,SCCalculation;
+    private Button Trigo,Func;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +86,8 @@ public class ScienceFragment extends Fragment {
         Button SCEqual = view.findViewById(R.id.SC_equal);
         Button Second =view.findViewById(R.id.second);
         ImageButton SCBackspace = view.findViewById(R.id.SC_backspace);
+        Trigo = view.findViewById(R.id.trigo);
+        Func = view.findViewById(R.id.function);
 
         SCResult = (TextView) view.findViewById(R.id.SC_result);
         SCCalculation =(TextView) view.findViewById(R.id.SC_calculation);
@@ -161,13 +169,20 @@ public class ScienceFragment extends Fragment {
             }
         });
 
+        Trigo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogTrigo();
+            }
+        });
+
         Second.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(SCCan2.getText().equals(R.string.square)){
                     SCCan2.setText(R.string.cube);
                 }else{
-                    SCCan2.getText().equals(R.string.square);
+                    SCCan2.setText("x^2");
                 }
                 /*
                 if(SCSquare.getText().)
@@ -668,6 +683,224 @@ public class ScienceFragment extends Fragment {
         });
     }
 
+    private void showDialogTrigo() {
+        Dialog dialog = new Dialog(this.getActivity(),
+                android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog_trigo_layout);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.x = 0; lp.y = 325;
+        lp.gravity = Gravity.TOP|Gravity.LEFT;
+
+        dialog.getWindow().setAttributes(lp);
+
+        Button it_sin = dialog.findViewById(R.id.it_sin);
+        Button it_cos = dialog.findViewById(R.id.it_cos);
+        Button it_tan = dialog.findViewById(R.id.it_tan);
+        Button it_csc = dialog.findViewById(R.id.it_csc);
+        Button it_cot = dialog.findViewById(R.id.it_cot);
+        Button it_sec = dialog.findViewById(R.id.it_sec);
+        Button it_2nd = dialog.findViewById(R.id.it_second);
+        Button it_hyp = dialog.findViewById(R.id.it_hyp);
+
+        it_sin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = SCCalculation.getText().toString();
+                if(s.equals("")){
+                    s = "sin(" + SCResult.getText().toString() +")";
+                    SCCalculation.setText(s);
+                    double d = eval(s);
+                    input = s;
+                    SCResult.setText(Double.toString(d));
+                }else {
+                    if (s.lastIndexOf("=") > 0) {
+                        s = "sin(" + input + ")";
+                        input = s;
+                    } else if (s.charAt(s.length() - 1) != ')') {
+                        String temp = "sin(" + SCResult.getText().toString() + ")";
+                        s += temp;
+                        input = temp;
+                    } else {
+                        s = s.substring(0, s.length() - input.length());
+                        s += "sin(" + input + ")";
+                        input = "sin(" + input + ")";
+                    }
+                    SCCalculation.setText(s);
+                    SCResult.setText(Double.toString(eval(input)));
+                }
+                flag = true;
+            }
+        });
+
+        it_cos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = SCCalculation.getText().toString();
+                if(s.equals("")){
+                    s = "cos(" + SCResult.getText().toString() +")";
+                    SCCalculation.setText(s);
+                    double d = eval(s);
+                    input = s;
+                    SCResult.setText(Double.toString(d));
+                }else {
+                    if (s.lastIndexOf("=") > 0) {
+                        s = "cos(" + input + ")";
+                        input = s;
+                    } else if (s.charAt(s.length() - 1) != ')') {
+                        String temp = "cos(" + SCResult.getText().toString() + ")";
+                        s += temp;
+                        input = temp;
+                    } else {
+                        s = s.substring(0, s.length() - input.length());
+                        s += "cos(" + input + ")";
+                        input = "cos(" + input + ")";
+                    }
+                    SCCalculation.setText(s);
+                    SCResult.setText(Double.toString(eval(input)));
+                }
+                flag = true;
+            }
+        });
+
+        it_tan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = SCCalculation.getText().toString();
+                if(s.equals("")){
+                    s = "tan(" + SCResult.getText().toString() +")";
+                    SCCalculation.setText(s);
+                    double d = eval(s);
+                    input = s;
+                    SCResult.setText(Double.toString(d));
+                }else {
+                    if (s.lastIndexOf("=") > 0) {
+                        s = "tan(" + input + ")";
+                        input = s;
+                    } else if (s.charAt(s.length() - 1) != ')') {
+                        String temp = "tan(" + SCResult.getText().toString() + ")";
+                        s += temp;
+                        input = temp;
+                    } else {
+                        s = s.substring(0, s.length() - input.length());
+                        s += "tan(" + input + ")";
+                        input = "tan(" + input + ")";
+                    }
+                    SCCalculation.setText(s);
+                    SCResult.setText(Double.toString(eval(input)));
+                }
+                flag = true;
+            }
+        });
+
+        it_cot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = SCCalculation.getText().toString();
+                if(s.equals("")){
+                    s = "cot(" + SCResult.getText().toString() +")";
+                    SCCalculation.setText(s);
+                    double d = eval(s);
+                    input = s;
+                    SCResult.setText(Double.toString(d));
+                }else {
+                    if (s.lastIndexOf("=") > 0) {
+                        s = "cot(" + input + ")";
+                        input = s;
+                    } else if (s.charAt(s.length() - 1) != ')') {
+                        String temp = "cot(" + SCResult.getText().toString() + ")";
+                        s += temp;
+                        input = temp;
+                    } else {
+                        s = s.substring(0, s.length() - input.length());
+                        s += "cot(" + input + ")";
+                        input = "cot(" + input + ")";
+                    }
+                    SCCalculation.setText(s);
+                    SCResult.setText(Double.toString(eval(input)));
+                }
+                flag = true;
+            }
+        });
+
+        it_csc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = SCCalculation.getText().toString();
+                if(s.equals("")){
+                    s = "csc(" + SCResult.getText().toString() +")";
+                    SCCalculation.setText(s);
+                    double d = eval(s);
+                    input = s;
+                    SCResult.setText(Double.toString(d));
+                }else {
+                    if (s.lastIndexOf("=") > 0) {
+                        s = "csc(" + input + ")";
+                        input = s;
+                    } else if (s.charAt(s.length() - 1) != ')') {
+                        String temp = "csc(" + SCResult.getText().toString() + ")";
+                        s += temp;
+                        input = temp;
+                    } else {
+                        s = s.substring(0, s.length() - input.length());
+                        s += "csc(" + input + ")";
+                        input = "csc(" + input + ")";
+                    }
+                    SCCalculation.setText(s);
+                    SCResult.setText(Double.toString(eval(input)));
+                }
+                flag = true;
+            }
+        });
+
+        it_sec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = SCCalculation.getText().toString();
+                if(s.equals("")){
+                    s = "sec(" + SCResult.getText().toString() +")";
+                    SCCalculation.setText(s);
+                    double d = eval(s);
+                    input = s;
+                    SCResult.setText(Double.toString(d));
+                }else {
+                    if (s.lastIndexOf("=") > 0) {
+                        s = "sec(" + input + ")";
+                        input = s;
+                    } else if (s.charAt(s.length() - 1) != ')') {
+                        String temp = "sec(" + SCResult.getText().toString() + ")";
+                        s += temp;
+                        input = temp;
+                    } else {
+                        s = s.substring(0, s.length() - input.length());
+                        s += "sec(" + input + ")";
+                        input = "sec(" + input + ")";
+                    }
+                    SCCalculation.setText(s);
+                    SCResult.setText(Double.toString(eval(input)));
+                }
+                flag = true;
+            }
+        });
+
+        it_2nd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        it_hyp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+    }
+
     public static long factorial(long n){
         return ( n == 1 || n == 0) ? 1 : n * factorial(n-1);
     }
@@ -796,6 +1029,9 @@ public class ScienceFragment extends Fragment {
                     else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
                     else if (func.equals("cos")) x = Math.cos(Math.toRadians(x));
                     else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
+                    else if (func.equals("cot")) x = 1/(Math.tan(Math.toRadians(x)));
+                    else if (func.equals("sec")) x = 1/Math.cos(Math.toRadians(x));
+                    else if (func.equals("csc")) x = 1/Math.sin(Math.toRadians(x));
                     else if (func.equals("log")) x = Math.log10(x);
                     else if (func.equals("ln")) x = Math.log(x);
                     else throw new RuntimeException("Unknown function: " + func);

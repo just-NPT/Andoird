@@ -135,7 +135,7 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:srcCompat="@drawable/ic_div_foreground" />1
+                app:srcCompat="@drawable/ic_div1_foreground" />
 
         </TableRow>
 
@@ -492,4 +492,19 @@
         app:layout_constraintHorizontal_bias="0.915"
         app:layout_constraintStart_toStartOf="parent"
         android:gravity="end"/>
+
+    <Button
+        android:id="@+id/it_change"
+        android:layout_width="220dp"
+        android:layout_height="60dp"
+        android:text="Phép toán thao tác bit"
+        app:layout_constraintBottom_toBottomOf="@+id/tableLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.574"
+        android:background="@drawable/button"
+        android:textSize="17sp"
+        android:textStyle="bold"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

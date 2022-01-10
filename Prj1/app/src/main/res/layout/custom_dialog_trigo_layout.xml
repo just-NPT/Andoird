@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
+
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/it_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/second_option"
+            android:textColor="@color/black"
+            android:background="@drawable/button"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/it_sin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sin"
+            android:textColor="@color/black"
+            android:background="@drawable/button"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/it_cos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cos"
+            android:textColor="@color/black"
+            android:background="@drawable/button"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/it_tan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tan"
+            android:textColor="@color/black"
+            android:background="@drawable/button"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/it_hyp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="hyp"
+            android:textColor="@color/black"
+            android:background="@drawable/button"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/it_sec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sec"
+            android:textColor="@color/black"
+            android:background="@drawable/button"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+
+        <Button
+            android:id="@+id/it_csc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="csc"
+            android:textColor="@color/black"
+            android:background="@drawable/button"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+
+        <Button
+            android:id="@+id/it_cot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cot"
+            android:textColor="@color/black"
+            android:background="@drawable/button"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+    </TableRow>
+</TableLayout>

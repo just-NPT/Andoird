@@ -9,12 +9,16 @@
         <entry key="..\:/Test/Prj1/app/src/main/res/drawable/ic_backspace1_foreground.xml" value="0.2703125" />
         <entry key="..\:/Test/Prj1/app/src/main/res/drawable/ic_dev_background.xml" value="0.2703125" />
         <entry key="..\:/Test/Prj1/app/src/main/res/drawable/ic_dev_foreground.xml" value="0.2703125" />
+        <entry key="..\:/Test/Prj1/app/src/main/res/drawable/ic_div1_background.xml" value="0.26614583333333336" />
+        <entry key="..\:/Test/Prj1/app/src/main/res/drawable/ic_div1_foreground.xml" value="0.26614583333333336" />
         <entry key="..\:/Test/Prj1/app/src/main/res/drawable/ic_multi_foreground.xml" value="0.2703125" />
         <entry key="..\:/Test/Prj1/app/src/main/res/drawable/ic_standard.xml" value="0.2703125" />
         <entry key="..\:/Test/Prj1/app/src/main/res/drawable/ic_standard_foreground.xml" value="0.2703125" />
         <entry key="..\:/Test/Prj1/app/src/main/res/layout-v28/fragment_science.xml" value="0.25416666666666665" />
         <entry key="..\:/Test/Prj1/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Test/Prj1/app/src/main/res/layout/activity_standard_cal.xml" value="0.25416666666666665" />
+        <entry key="..\:/Test/Prj1/app/src/main/res/layout/custom_dialog_change_layout.xml" value="0.25" />
+        <entry key="..\:/Test/Prj1/app/src/main/res/layout/custom_dialog_trigo_layout.xml" value="0.25" />
         <entry key="..\:/Test/Prj1/app/src/main/res/layout/fragment_programmer.xml" value="0.16981132075471697" />
         <entry key="..\:/Test/Prj1/app/src/main/res/layout/fragment_science.xml" value="0.25416666666666665" />
         <entry key="..\:/Test/Prj1/app/src/main/res/layout/fragment_standard.xml" value="0.25416666666666665" />

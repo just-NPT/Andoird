@@ -1,14 +1,18 @@
 package com.example.prj1.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -22,6 +26,7 @@ public class ProgrammerFragment extends Fragment {
     TextView DECtext,HEXtext,BINtext,OCTtext;
     int heSo = 10;
     Button btnZero,btnOne,btnTwo,btnThree,btnFour,btnFive,btnSix,btnSeven,btnEight,btnNine,btnA,btnB,btnC,btnD,btnE,btnF;
+    Button btnChange;
     String input = "";
 
     @Override
@@ -65,6 +70,7 @@ public class ProgrammerFragment extends Fragment {
         Button btnRshift = view.findViewById(R.id.it_btnRshift);
         Button btnLshift = view.findViewById(R.id.it_btnLshift);
         Button btnMod = view.findViewById(R.id.it_btnMod);
+        btnChange = view.findViewById(R.id.it_change);
 
         Calculation = view.findViewById(R.id.it_calculation);
         Result = view.findViewById(R.id.it_result);
@@ -203,6 +209,13 @@ public class ProgrammerFragment extends Fragment {
                 }else{
                     return;
                 }
+            }
+        });
+
+        btnChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeAction();
             }
         });
 
@@ -485,10 +498,12 @@ public class ProgrammerFragment extends Fragment {
                     s += Result.getText().toString();
                     String d = solve(s);
                     input = d;
-                    Result.setText(input);
-                    Calculation.setText(s + "=");
-                    show();
-                    flag = true;
+                    System.out.println(d);
+                    return;
+//                    Result.setText(input);
+//                    Calculation.setText(s + "=");
+//                    show();
+//                    flag = true;
                 }
             }
         });
@@ -545,6 +560,86 @@ public class ProgrammerFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void changeAction() {
+        Dialog dialog = new Dialog(this.getActivity(),
+                android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog_change_layout);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.x = 0; lp.y = 100;
+//        lp.gravity = Gravity.TOP|Gravity.LEFT;
+
+        dialog.getWindow().setAttributes(lp);
+
+        Button btnAnd = dialog.findViewById(R.id.it_and);
+        Button btnOr = dialog.findViewById(R.id.it_or);
+        Button btnNot = dialog.findViewById(R.id.it_not);
+        Button btnNand = dialog.findViewById(R.id.it_nand);
+        Button btnNor = dialog.findViewById(R.id.it_nor);
+        Button btnXor = dialog.findViewById(R.id.it_xor);
+
+        btnAnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = Calculation.getText().toString();
+                if(s.equals("")){
+                    Calculation.setText(Result.getText().toString()+" AND ");
+                }else{
+                    if(s.lastIndexOf("=") > 0) {
+                        Calculation.setText(input + " AND ");
+                    }else if(s.charAt(s.length()-1) == ')'){
+                        String d = solve(s);
+                        Calculation.setText(s+" AND ");
+                        Result.setText(d);
+                        show();
+                    }else {
+                        String temp = Result.getText().toString();
+                        s += temp;
+                        String d = solve(s);
+                        Calculation.setText(s+" AND ");
+                        Result.setText(d);
+                        show();
+                    }
+                }
+                flag = true;
+                dialog.dismiss();
+            }
+        });
+
+        btnOr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = Calculation.getText().toString();
+                if(s.equals("")){
+                    Calculation.setText(Result.getText().toString()+"Or");
+                }else{
+                    if(s.lastIndexOf("=") > 0) {
+                        Calculation.setText(input + "Or");
+                    }else if(s.charAt(s.length()-1) == ')'){
+                        String d = solve(s);
+                        Calculation.setText(s+"Or");
+                        Result.setText(d);
+                        show();
+                    }else {
+                        String temp = Result.getText().toString();
+                        s += temp;
+                        String d = solve(s);
+                        Calculation.setText(s+"Or");
+                        Result.setText(d);
+                        show();
+                    }
+                }
+                flag = true;
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     public void updateInput(){
@@ -767,7 +862,7 @@ public class ProgrammerFragment extends Fragment {
         return newRes;
     }
 
-    public static long eval(final String str) {
+    public static long eval(String str) {
         return new Object() {
             int pos = -1, ch;
 
@@ -800,8 +895,18 @@ public class ProgrammerFragment extends Fragment {
 
             long parseExpression() {
                 long x = parseTerm();
+                int startPos = this.pos;
                 for (;;) {
-                    if      (eat('+')) x += parseTerm(); // addition
+                    if(ch >= 'A' && ch <= 'Z') {
+                        while (ch >= 'A' && ch <= 'Z') nextChar();
+                        String temp = str.substring(startPos, this.pos);
+                        if (temp.equals("AND")) x &= parseTerm();
+                        else if (temp.equals("NAND")) x = ~(x & parseTerm());
+                        else if (temp.equals("OR")) x |= parseTerm();
+                        else if (temp.equals("NOR")) x = ~(x | parseTerm());
+                        else if (temp.equals("XOR")) x ^= parseTerm();
+                    }
+                    else if (eat('+')) x += parseTerm(); // addition
                     else if (eat('-')) x -= parseTerm(); // subtraction
                     else return x;
                 }
@@ -842,11 +947,18 @@ public class ProgrammerFragment extends Fragment {
                 } else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
                     while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
                     x = Long.parseLong(str.substring(startPos, this.pos));
-                } else {
+
+                } else if (ch >= 'A' && ch <= 'Z') { // functions
+                    while (ch >= 'A' && ch <= 'Z') nextChar();
+                    String func = str.substring(startPos, this.pos);
+                    x = parseFactor();
+                    if (func.equals("NOT")) x = ~x;
+                    else throw new RuntimeException("Unknown function: " + func);
+                }else {
                     throw new RuntimeException("Unexpected: " + (char)ch);
                 }
 
-                if (eat('^')) x = (long) Math.pow(x, parseFactor()); // exponentiation
+//                if (eat('^')) x = (long) Math.pow(x, parseFactor()); // exponentiation
 
                 return x;
             }

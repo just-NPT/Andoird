@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     replaceFragment(new ScienceFragment());
                     curr_fragment = FRAGMENT_SCIENCE;
                 }
-                case R.id.nav_dev:
+            case R.id.nav_dev:
                 if(curr_fragment != FRAGMENT_DEV){
                     replaceFragment(new ProgrammerFragment());
                     curr_fragment = FRAGMENT_DEV;
