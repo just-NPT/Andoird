@@ -64,6 +64,37 @@
     <string name="C">C</string>
     <string name="D">D</string>
     <string name="E">E</string>
+    <string name="xMuY">x^y</string>
+    <string name="xCanY">y√x</string>
+    <string name="muoiMu">10^x</string>
+    <string name="haiMu">2^x</string>
+    <string name="eMu">e^x</string>
+    <string name="logY">Logy</string>
+    <string name="sin">sin</string>
+    <string name="sinh">sinh</string>
+    <string name="arcsin">arcsin</string>
+    <string name="arcsinh">arcsinh</string>
+    <string name="cos">cos</string>
+    <string name="cosh">cosh</string>
+    <string name="arccos">arccos</string>
+    <string name="arccosh">arccosh</string>
+    <string name="tan">tan</string>
+    <string name="tanh">tanh</string>
+    <string name="arctan">arctan</string>
+    <string name="arctanh">arctanh</string>
+    <string name="hyp">hyp</string>
+    <string name="sec">sec</string>
+    <string name="sech">sech</string>
+    <string name="arcsec">arcsec</string>
+    <string name="arcsech">arcsech</string>
+    <string name="csc">csc</string>
+    <string name="csch">csch</string>
+    <string name="arccsc">arccsc</string>
+    <string name="arccsch">arccsch</string>
+    <string name="cot">cot</string>
+    <string name="coth">coth</string>
+    <string name="arccoth">arccoth</string>
+    <string name="arccot">cot</string>
     <!--0000000000000000000000000000000-->
 
 

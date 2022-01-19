@@ -33,6 +33,9 @@ public class ScienceFragment extends Fragment {
     public String input ;
     private TextView SCResult ,SCCalculation;
     private Button Trigo,Func;
+    boolean hypFlag = false,secFlag = false,secSCFlag = false;
+    Button it_sin,it_cos,it_tan,it_csc,it_sec,it_cot;
+    Button Ln,SCLog,SCCan2,SCxMuY,SCSquare,muoiMu;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,18 +73,20 @@ public class ScienceFragment extends Fragment {
         Button SCDot = view.findViewById(R.id.SC_Dot);
         Button SCFraction = view.findViewById(R.id.SC_Fraction);
         Button SCNFactorial = view.findViewById(R.id.SC_n_factorial);
-        Button Ln = view.findViewById(R.id.Ln);
-        Button SCLog = view.findViewById(R.id.SC_Log);
+        Button SCChangeOP = view.findViewById(R.id.SC_changeOp);
+        Ln = view.findViewById(R.id.Ln);
+        SCLog = view.findViewById(R.id.SC_Log);
         Button SCLPar = view.findViewById(R.id.SC_L_par);
         Button SCRPar = view.findViewById(R.id.SC_R_par);
         Button SCClearEntryBTN = view.findViewById(R.id.SC_Clear_EntryBTN);
-        Button SCCan2 = view.findViewById(R.id.SC_can_2);
+        SCCan2 = view.findViewById(R.id.SC_can_2);
         Button SCMod = view.findViewById(R.id.SC_Mod);
-        Button muoiMu = view.findViewById(R.id.muoi_mu);
+        SCxMuY = view .findViewById(R.id.x_mu_y);
+        muoiMu = view.findViewById(R.id.muoi_mu);
         Button SCAbs = view.findViewById(R.id.SC_abs);
         Button pi = view.findViewById(R.id.pi);
         Button e = view.findViewById(R.id.e);
-        Button SCSquare = view.findViewById(R.id.SC_square);
+        SCSquare = view.findViewById(R.id.SC_square);
         Button SCEXP = view.findViewById(R.id.SC_EXP);
         Button SCEqual = view.findViewById(R.id.SC_equal);
         Button Second =view.findViewById(R.id.second);
@@ -179,34 +184,38 @@ public class ScienceFragment extends Fragment {
         Second.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(SCCan2.getText().equals(R.string.square)){
-                    SCCan2.setText(R.string.cube);
-                }else{
-                    SCCan2.setText("x^2");
-                }
-                /*
-                if(SCSquare.getText().)
-                * */
+                secSCFlag = !secSCFlag;
+                changeSec();
             }
         });
 
         SCEqual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = SCCalculation.getText().toString();
-                if(s.charAt(s.length()-1) == ')') {
-                    double d = eval(s);
-                    input = Double.toString(d);
-                    SCResult.setText(input);
-                    SCCalculation.setText(s + "=");
-                    flag = true;
-                } else {
-                    s += SCResult.getText().toString();
-                    double d = eval(s);
-                    input = Double.toString(d);
-                    SCResult.setText(input);
-                    SCCalculation.setText(s + "=");
-                    flag = true;
+                if(SCCalculation.getText().length() == 0){
+                    SCCalculation.setText(SCResult.getText());
+                    String s = SCCalculation.getText().toString();
+                        double d = eval(s);
+                        input = deleteZeroTail(d);
+                        SCResult.setText(input);
+                        SCCalculation.setText(s + "=");
+                        flag = true;
+                }else{
+                    String s = SCCalculation.getText().toString();
+                    if (s.charAt(s.length() - 1) == ')') {
+                        double d = eval(s);
+                        input = deleteZeroTail(d);
+                        SCResult.setText(input);
+                        SCCalculation.setText(s + "=");
+                        flag = true;
+                    } else {
+                        s += SCResult.getText().toString();
+                        double d = eval(s);
+                        input = deleteZeroTail(d);
+                        SCResult.setText(input);
+                        SCCalculation.setText(s + "=");
+                        flag = true;
+                    }
                 }
             }
         });
@@ -223,13 +232,13 @@ public class ScienceFragment extends Fragment {
                     }else if(s.charAt(s.length()-1) == ')'){
                         double d = eval(s);
                         SCCalculation.setText(s+"+");
-                        SCResult.setText(Double.toString(d));
+                        SCResult.setText(deleteZeroTail(d));
                     }else {
                         String temp = SCResult.getText().toString();
                         s += temp;
                         double d = eval(s);
                         SCCalculation.setText(s+"+");
-                        SCResult.setText(Double.toString(d));
+                        SCResult.setText(deleteZeroTail(d));
                     }
                 }
                 flag = true;
@@ -248,13 +257,13 @@ public class ScienceFragment extends Fragment {
                     }else if(s.charAt(s.length()-1) == ')'){
                         double d = eval(s);
                         SCCalculation.setText(s+"-");
-                        SCResult.setText(Double.toString(d));
+                        SCResult.setText(deleteZeroTail(d));
                     }else {
                         String temp = SCResult.getText().toString();
                         s += temp;
                         double d = eval(s);
                         SCCalculation.setText(s+"-");
-                        SCResult.setText(Double.toString(d));
+                        SCResult.setText(deleteZeroTail(d));
                     }
                 }
                 flag = true;
@@ -275,10 +284,10 @@ public class ScienceFragment extends Fragment {
                             int i = Math.max(s.lastIndexOf("+"), s.lastIndexOf("-"));
                             String temp = s.substring(i + 1);
                             double d = eval(temp);
-                            SCResult.setText(Double.toString(d));
+                            SCResult.setText(deleteZeroTail(d));
                         }else{
                             double d = eval(s);
-                            SCResult.setText(Double.toString(d));
+                            SCResult.setText(deleteZeroTail(d));
                         }
                         SCCalculation.setText(s + "*");
                     }else{
@@ -287,10 +296,10 @@ public class ScienceFragment extends Fragment {
                             int i = Math.max(s.lastIndexOf("+"), s.lastIndexOf("-"));
                             String temp = s.substring(i + 1);
                             double d = eval(temp);
-                            SCResult.setText(Double.toString(d));
+                            SCResult.setText(deleteZeroTail(d));
                         }else{
                             double d = eval(s);
-                            SCResult.setText(Double.toString(d));
+                            SCResult.setText(deleteZeroTail(d));
                         }
                         SCCalculation.setText(s + "*");
                     }
@@ -312,10 +321,10 @@ public class ScienceFragment extends Fragment {
                             int i = Math.max(s.lastIndexOf("+"), s.lastIndexOf("-"));
                             String temp = s.substring(i + 1);
                             double d = eval(temp);
-                            SCResult.setText(Double.toString(d));
+                            SCResult.setText(deleteZeroTail(d));
                         }else{
                             double d = eval(s);
-                            SCResult.setText(Double.toString(d));
+                            SCResult.setText(deleteZeroTail(d));
                         }
                         SCCalculation.setText(s + "/");
                     }else{
@@ -324,12 +333,80 @@ public class ScienceFragment extends Fragment {
                             int i = Math.max(s.lastIndexOf("+"), s.lastIndexOf("-"));
                             String temp = s.substring(i + 1);
                             double d = eval(temp);
-                            SCResult.setText(Double.toString(d));
+                            SCResult.setText(deleteZeroTail(d));
                         }else{
                             double d = eval(s);
-                            SCResult.setText(Double.toString(d));
+                            SCResult.setText(deleteZeroTail(d));
                         }
                         SCCalculation.setText(s + "/");
+                    }
+                }
+                flag = true;
+            }
+        });
+
+        SCChangeOP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = SCCalculation.getText().toString();
+                if (s.equals("")) {
+                    s = "negate(" + SCResult.getText().toString() + ")";
+                    SCCalculation.setText(s);
+                    double d = Math.log10(Double.parseDouble(SCResult.getText().toString()));
+                    input = s;
+                    SCResult.setText(deleteZeroTail(d));
+                } else {
+                    if (s.lastIndexOf("=") > 0) {
+                        s = "negate(" + input + ")";
+                        input = s;
+                    } else if (s.charAt(s.length() - 1) != ')') {
+                        String temp = "negate(" + SCResult.getText().toString() + ")";
+                        s += temp;
+                        input = temp;
+                    } else {
+                        s = s.substring(0, s.length() - input.length());
+                        s += "negate(" + input + ")";
+                        input = "negate(" + input + ")";
+                    }
+                    SCCalculation.setText(s);
+                    SCResult.setText(deleteZeroTail(eval(input)));
+                }
+                flag = true;
+            }
+        });
+
+        SCxMuY.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = SCCalculation.getText().toString();
+                if(s.equals("")){
+                    SCCalculation.setText(SCResult.getText().toString()+"^");
+                }else{
+                    if(s.lastIndexOf("=") > 0){
+                        SCCalculation.setText(input+"^");
+                    }else if(s.charAt(s.length()-1) == ')'){
+                        if(s.contains("+")||s.contains("-")) {
+                            int i = Math.max(s.lastIndexOf("+"), s.lastIndexOf("-"));
+                            String temp = s.substring(i + 1);
+                            double d = eval(temp);
+                            SCResult.setText(deleteZeroTail(d));
+                        }else{
+                            double d = eval(s);
+                            SCResult.setText(deleteZeroTail(d));
+                        }
+                        SCCalculation.setText(s + "^");
+                    }else{
+                        s += SCResult.getText().toString();
+                        if(s.contains("+")||s.contains("-")) {
+                            int i = Math.max(s.lastIndexOf("+"), s.lastIndexOf("-"));
+                            String temp = s.substring(i + 1);
+                            double d = eval(temp);
+                            SCResult.setText(deleteZeroTail(d));
+                        }else{
+                            double d = eval(s);
+                            SCResult.setText(deleteZeroTail(d));
+                        }
+                        SCCalculation.setText(s + "^");
                     }
                 }
                 flag = true;
@@ -339,30 +416,59 @@ public class ScienceFragment extends Fragment {
         SCLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = SCCalculation.getText().toString();
-                if(s.equals("")){
-                    s = "log(" + SCResult.getText().toString() +")";
-                    SCCalculation.setText(s);
-                    double d = Math.log10(Double.parseDouble(SCResult.getText().toString()));
-                    input = s;
-                    SCResult.setText(Double.toString(d));
-                }else {
-                    if (s.lastIndexOf("=") > 0) {
-                        s = "log(" + input + ")";
+                if(!secSCFlag){
+                    String s = SCCalculation.getText().toString();
+                    if (s.equals("")) {
+                        s = "log(" + SCResult.getText().toString() + ")";
+                        SCCalculation.setText(s);
+                        double d = Math.log10(Double.parseDouble(SCResult.getText().toString()));
                         input = s;
-                    } else if (s.charAt(s.length() - 1) != ')') {
-                        String temp = "log(" + SCResult.getText().toString() + ")";
-                        s += temp;
-                        input = temp;
+                        SCResult.setText(deleteZeroTail(d));
                     } else {
-                        s = s.substring(0, s.length() - input.length());
-                        s += "log(" + input + ")";
-                        input = "log(" + input + ")";
+                        if (s.lastIndexOf("=") > 0) {
+                            s = "log(" + input + ")";
+                            input = s;
+                        } else if (s.charAt(s.length() - 1) != ')') {
+                            String temp = "log(" + SCResult.getText().toString() + ")";
+                            s += temp;
+                            input = temp;
+                        } else {
+                            s = s.substring(0, s.length() - input.length());
+                            s += "log(" + input + ")";
+                            input = "log(" + input + ")";
+                        }
+                        SCCalculation.setText(s);
+                        SCResult.setText(deleteZeroTail(eval(input)));
                     }
-                    SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                    flag = true;
+                }else {
+                    String s = SCCalculation.getText().toString();
+                    if (s.equals("")) {
+                        s = "log(" + SCResult.getText().toString() + ")";
+                        SCCalculation.setText(s);
+                        double d = Math.log10(Double.parseDouble(SCResult.getText().toString()));
+                        input = s;
+                        SCResult.setText(deleteZeroTail(d));
+                    } else {
+                        if (s.lastIndexOf("=") > 0) {
+                            s = "log(" + input + ")";
+                            input = s;
+                        } else if (s.charAt(s.length() - 1) != ')') {
+                            String temp = "log(" + SCResult.getText().toString() + ")";
+                            s += temp;
+                            input = temp;
+                        } else {
+                            s = s.substring(0, s.length() - input.length());
+                            s += "log(" + input + ")";
+                            input = "log(" + input + ")";
+                        }
+                        SCCalculation.setText(s);
+                        SCResult.setText(deleteZeroTail(eval(input)));
+                    }
+                    flag = true;
+                    secSCFlag = false;
+                    changeSec();
                 }
-                flag = true;
             }
         });
 
@@ -375,7 +481,7 @@ public class ScienceFragment extends Fragment {
                     SCCalculation.setText(s);
                     double d = Math.abs(Double.parseDouble(SCResult.getText().toString()));
                     input = s;
-                    SCResult.setText(Double.toString(d));
+                    SCResult.setText(deleteZeroTail(d));
                 }else {
                     if (s.lastIndexOf("=") > 0) {
                         s = "abs(" + input + ")";
@@ -390,7 +496,7 @@ public class ScienceFragment extends Fragment {
                         input = "abs(" + input + ")";
                     }
                     SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                    SCResult.setText(deleteZeroTail(eval(input)));
                 }
                 flag = true;
             }
@@ -405,7 +511,7 @@ public class ScienceFragment extends Fragment {
                     SCCalculation.setText(s);
                     double d = eval(s);
                     input = s;
-                    SCResult.setText(Double.toString(d));
+                    SCResult.setText(deleteZeroTail(d));
                 }else {
                     if (s.lastIndexOf("=") > 0) {
                         s = "fac(" + input + ")";
@@ -420,7 +526,7 @@ public class ScienceFragment extends Fragment {
                         s +=  input;
                     }
                     SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                    SCResult.setText(deleteZeroTail(eval(input)));
                 }
                 flag = true;
             }
@@ -429,60 +535,118 @@ public class ScienceFragment extends Fragment {
         Ln.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = SCCalculation.getText().toString();
-                if(s.equals("")){
-                    s = "ln(" + SCResult.getText().toString() +")";
-                    SCCalculation.setText(s);
-                    double d = eval(SCResult.getText().toString());
-                    input = s;
-                    SCResult.setText(Double.toString(d));
-                }else {
-                    if (s.lastIndexOf("=") > 0) {
-                        s = "ln(" + input + ")";
+                if(!secSCFlag){
+                    String s = SCCalculation.getText().toString();
+                    if (s.equals("")) {
+                        s = "ln(" + SCResult.getText().toString() + ")";
+                        SCCalculation.setText(s);
+                        double d = eval(s);
                         input = s;
-                    } else if (s.charAt(s.length() - 1) != ')') {
-                        String temp ="ln(" + SCResult.getText().toString() + ")";
-                        s += temp;
-                        input = temp;
+                        SCResult.setText(deleteZeroTail(d));
                     } else {
-                        s = s.substring(0, s.length() - input.length());
-                        s += "ln(" + input + ")";
-                        input = "ln(" + input + ")";
+                        if (s.lastIndexOf("=") > 0) {
+                            s = "ln(" + input + ")";
+                            input = s;
+                        } else if (s.charAt(s.length() - 1) != ')') {
+                            String temp = "ln(" + SCResult.getText().toString() + ")";
+                            s += temp;
+                            input = temp;
+                        } else {
+                            s = s.substring(0, s.length() - input.length());
+                            s += "ln(" + input + ")";
+                            input = "ln(" + input + ")";
+                        }
+                        SCCalculation.setText(s);
+                        SCResult.setText(deleteZeroTail(eval(input)));
                     }
-                    SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                    flag = true;
+                }else{
+                    String s = SCCalculation.getText().toString();
+                    if (s.equals("")) {
+                        s = "e^(" + SCResult.getText().toString() + ")";
+                        SCCalculation.setText(s);
+                        double d = eval(s);
+                        input = s;
+                        SCResult.setText(deleteZeroTail(d));
+                    } else {
+                        if (s.lastIndexOf("=") > 0) {
+                            s = "e^(" + input + ")";
+                            input = s;
+                        } else if (s.charAt(s.length() - 1) != ')') {
+                            String temp = "e^(" + SCResult.getText().toString() + ")";
+                            s += temp;
+                            input = temp;
+                        } else {
+                            s = s.substring(0, s.length() - input.length());
+                            s += "e^(" + input + ")";
+                            input = "e^(" + input + ")";
+                        }
+                        SCCalculation.setText(s);
+                        SCResult.setText(deleteZeroTail(eval(input)));
+                    }
+                    flag = true;
+                    secSCFlag = false;
+                    changeTrigoSec();
                 }
-                flag = true;
             }
         });
 
         muoiMu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = SCCalculation.getText().toString();
-                if(s.equals("")){
-                    s = "10^(" + SCResult.getText().toString() +")";
-                    SCCalculation.setText(s);
-                    double d = eval(s);
-                    input = s;
-                    SCResult.setText(Double.toString(d));
-                }else {
-                    if (s.lastIndexOf("=") > 0) {
-                        s = "10^(" + input + ")";
+                if(!secSCFlag){
+                    String s = SCCalculation.getText().toString();
+                    if (s.equals("")) {
+                        s = "10^(" + SCResult.getText().toString() + ")";
+                        SCCalculation.setText(s);
+                        double d = eval(s);
                         input = s;
-                    } else if (s.charAt(s.length() - 1) != ')') {
-                        String temp = "10^(" + SCResult.getText().toString() + ")";
-                        s += temp;
-                        input = temp;
+                        SCResult.setText(deleteZeroTail(d));
                     } else {
-                        s = s.substring(0, s.length() - input.length());
-                        s += "10^(" + input + ")";
-                        input = "10^(" + input + ")";
+                        if (s.lastIndexOf("=") > 0) {
+                            s = "10^(" + input + ")";
+                            input = s;
+                        } else if (s.charAt(s.length() - 1) != ')') {
+                            String temp = "10^(" + SCResult.getText().toString() + ")";
+                            s += temp;
+                            input = temp;
+                        } else {
+                            s = s.substring(0, s.length() - input.length());
+                            s += "10^(" + input + ")";
+                            input = "10^(" + input + ")";
+                        }
+                        SCCalculation.setText(s);
+                        SCResult.setText(deleteZeroTail(eval(input)));
                     }
-                    SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                    flag = true;
+                }else{
+                    String s = SCCalculation.getText().toString();
+                    if (s.equals("")) {
+                        s = "2^(" + SCResult.getText().toString() + ")";
+                        SCCalculation.setText(s);
+                        double d = eval(s);
+                        input = s;
+                        SCResult.setText(deleteZeroTail(d));
+                    } else {
+                        if (s.lastIndexOf("=") > 0) {
+                            s = "2^(" + input + ")";
+                            input = s;
+                        } else if (s.charAt(s.length() - 1) != ')') {
+                            String temp = "2^(" + SCResult.getText().toString() + ")";
+                            s += temp;
+                            input = temp;
+                        } else {
+                            s = s.substring(0, s.length() - input.length());
+                            s += "2^(" + input + ")";
+                            input = "2^(" + input + ")";
+                        }
+                        SCCalculation.setText(s);
+                        SCResult.setText(deleteZeroTail(eval(input)));
+                    }
+                    flag = true;
+                    secSCFlag = false;
+                    changeSec();
                 }
-                flag = true;
             }
         });
 
@@ -490,29 +654,57 @@ public class ScienceFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String s = SCCalculation.getText().toString();
-                if(s.equals("")){
-                    s = "sqrt(" + SCResult.getText().toString() +")";
-                    SCCalculation.setText(s);
-                    double d = eval(s);
-                    input = s;
-                    SCResult.setText(Double.toString(d));
-                }else {
-                    if (s.lastIndexOf("=") > 0) {
-                        s = "sqrt(" + input + ")";
+                if(!secSCFlag){
+                    if (s.equals("")) {
+                        s = "sqrt(" + SCResult.getText().toString() + ")";
+                        SCCalculation.setText(s);
+                        double d = eval(s);
                         input = s;
-                    } else if (s.charAt(s.length() - 1) != ')') {
-                        String temp = "sqrt(" + SCResult.getText().toString() + ")";
-                        s += temp;
-                        input = temp;
+                        SCResult.setText(deleteZeroTail(d));
                     } else {
-                        s = s.substring(0, s.length() - input.length());
-                        s += "sqrt(" + input + ")";
-                        input = "sqrt(" + input + ")";
+                        if (s.lastIndexOf("=") > 0) {
+                            s = "sqrt(" + input + ")";
+                            input = s;
+                        } else if (s.charAt(s.length() - 1) != ')') {
+                            String temp = "sqrt(" + SCResult.getText().toString() + ")";
+                            s += temp;
+                            input = temp;
+                        } else {
+                            s = s.substring(0, s.length() - input.length());
+                            s += "sqrt(" + input + ")";
+                            input = "sqrt(" + input + ")";
+                        }
+                        SCCalculation.setText(s);
+                        SCResult.setText(deleteZeroTail(eval(input)));
                     }
-                    SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                    flag = true;
+                }else{
+                    if (s.equals("")) {
+                        s = "cuberoot(" + SCResult.getText().toString() + ")";
+                        SCCalculation.setText(s);
+                        double d = eval(s);
+                        input = s;
+                        SCResult.setText(deleteZeroTail(d));
+                    } else {
+                        if (s.lastIndexOf("=") > 0) {
+                            s = "cuberoot(" + input + ")";
+                            input = s;
+                        } else if (s.charAt(s.length() - 1) != ')') {
+                            String temp = "cuberoot(" + SCResult.getText().toString() + ")";
+                            s += temp;
+                            input = temp;
+                        } else {
+                            s = s.substring(0, s.length() - input.length());
+                            s += "cuberoot(" + input + ")";
+                            input = "cuberoot(" + input + ")";
+                        }
+                        SCCalculation.setText(s);
+                        SCResult.setText(deleteZeroTail(eval(input)));
+                    }
+                    flag = true;
+                    secSCFlag = false;
+                    changeSec();
                 }
-                flag = true;
             }
         });
 
@@ -520,29 +712,57 @@ public class ScienceFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String s = SCCalculation.getText().toString();
-                if(s.equals("")){
-                    s = "sqr(" + SCResult.getText().toString() +")";
-                    SCCalculation.setText(s);
-                    double d = eval(SCResult.getText().toString());
-                    input = s;
-                    SCResult.setText(Double.toString(d));
-                }else {
-                    if (s.lastIndexOf("=") > 0) {
-                        s = "sqr(" + input + ")";
+                if(!secSCFlag){
+                    if (s.equals("")) {
+                        s = "sqr(" + SCResult.getText().toString() + ")";
+                        SCCalculation.setText(s);
+                        double d = eval(s);
                         input = s;
-                    } else if (s.charAt(s.length() - 1) != ')') {
-                        String temp = "sqr" + SCResult.getText().toString() +")";
-                        s += temp;
-                        input = temp;
+                        SCResult.setText(deleteZeroTail(d));
                     } else {
-                        s = s.substring(0, s.length() - input.length());
-                        s += "sqr(" + input + ")";
-                        input = "sqr(" + input + ")";
+                        if (s.lastIndexOf("=") > 0) {
+                            s = "sqr(" + input + ")";
+                            input = s;
+                        } else if (s.charAt(s.length() - 1) != ')') {
+                            String temp = "sqr" + SCResult.getText().toString() + ")";
+                            s += temp;
+                            input = temp;
+                        } else {
+                            s = s.substring(0, s.length() - input.length());
+                            s += "sqr(" + input + ")";
+                            input = "sqr(" + input + ")";
+                        }
+                        SCCalculation.setText(s);
+                        SCResult.setText(deleteZeroTail(eval(input)));
                     }
-                    SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                    flag = true;
+                }else{
+                    if (s.equals("")) {
+                        s = "cube(" + SCResult.getText().toString() + ")";
+                        SCCalculation.setText(s);
+                        double d = eval(s);
+                        input = s;
+                        SCResult.setText(deleteZeroTail(d));
+                    } else {
+                        if (s.lastIndexOf("=") > 0) {
+                            s = "cube(" + input + ")";
+                            input = s;
+                        } else if (s.charAt(s.length() - 1) != ')') {
+                            String temp = "cube" + SCResult.getText().toString() + ")";
+                            s += temp;
+                            input = temp;
+                        } else {
+                            s = s.substring(0, s.length() - input.length());
+                            s += "cube(" + input + ")";
+                            input = "cube(" + input + ")";
+                        }
+                        SCCalculation.setText(s);
+                        SCResult.setText(deleteZeroTail(eval(input)));
+                    }
+                    flag = true;
+                    secSCFlag = false;
+                    changeSec();
                 }
-                flag = true;
             }
         });
 
@@ -555,7 +775,7 @@ public class ScienceFragment extends Fragment {
                     SCCalculation.setText(s);
                     double d = eval(SCResult.getText().toString());
                     input = s;
-                    SCResult.setText(Double.toString(d));
+                    SCResult.setText(deleteZeroTail(d));
                 }else {
                     if (s.lastIndexOf("=") > 0) {
                         s = "1/(" + input + ")";
@@ -570,7 +790,7 @@ public class ScienceFragment extends Fragment {
                         input = "1/(" + input + ")";
                     }
                     SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                    SCResult.setText(deleteZeroTail(eval(input)));
                 }
                 flag = true;
             }
@@ -613,10 +833,10 @@ public class ScienceFragment extends Fragment {
                         int i = Math.max(s.lastIndexOf("+"), s.lastIndexOf("-"));
                         String temp = s.substring(i + 1);
                         double d = eval(temp);
-                        SCResult.setText(Double.toString(d));
+                        SCResult.setText(deleteZeroTail(d));
                     }else{
                         double d = eval(s);
-                        SCResult.setText(Double.toString(d));
+                        SCResult.setText(deleteZeroTail(d));
                     }
                     SCCalculation.setText(s + "%");
                 }else{
@@ -625,10 +845,10 @@ public class ScienceFragment extends Fragment {
                         int i = Math.max(s.lastIndexOf("+"),s.lastIndexOf("-"));
                         String temp = s.substring(i+1);
                         double d = eval(temp);
-                        SCResult.setText(Double.toString(d));
+                        SCResult.setText(deleteZeroTail(d));
                     }else{
                         Double d = eval(s);
-                        SCResult.setText(Double.toString(d));
+                        SCResult.setText(deleteZeroTail(d));
                     }
                 }
                 SCCalculation.setText(s+"%");
@@ -677,10 +897,28 @@ public class ScienceFragment extends Fragment {
                     s += ")";
                     SCCalculation.setText(s);
                     updateInput();
-                    SCResult.setText(Double.toString(eval(input)));
                 }
             }
         });
+    }
+
+    private void changeSec() {
+        if(secSCFlag){
+            SCCan2.setText(R.string.cuberoot);
+            SCSquare.setText(R.string.cube);
+            SCxMuY.setText(R.string.xCanY);
+            muoiMu.setText(R.string.haiMu);
+            SCLog.setText(R.string.logY);
+            Ln.setText(R.string.eMu);
+        }else{
+            SCCan2.setText(R.string.root);
+            SCSquare.setText(R.string.square);
+            SCxMuY.setText(R.string.xMuY);
+            muoiMu.setText(R.string.muoiMu);
+            SCLog.setText(R.string.log);
+            Ln.setText(R.string.ln);
+        }
+
     }
 
     private void showDialogTrigo() {
@@ -692,137 +930,506 @@ public class ScienceFragment extends Fragment {
         lp.copyFrom(dialog.getWindow().getAttributes());
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.x = 0; lp.y = 325;
+        lp.x = 0; lp.y = 550 ;
         lp.gravity = Gravity.TOP|Gravity.LEFT;
 
         dialog.getWindow().setAttributes(lp);
+        dialog.setCancelable(true);
 
-        Button it_sin = dialog.findViewById(R.id.it_sin);
-        Button it_cos = dialog.findViewById(R.id.it_cos);
-        Button it_tan = dialog.findViewById(R.id.it_tan);
-        Button it_csc = dialog.findViewById(R.id.it_csc);
-        Button it_cot = dialog.findViewById(R.id.it_cot);
-        Button it_sec = dialog.findViewById(R.id.it_sec);
+        it_sin = dialog.findViewById(R.id.it_sin);
+        it_cos = dialog.findViewById(R.id.it_cos);
+        it_tan = dialog.findViewById(R.id.it_tan);
+        it_csc = dialog.findViewById(R.id.it_csc);
+        it_cot = dialog.findViewById(R.id.it_cot);
+        it_sec = dialog.findViewById(R.id.it_sec);
         Button it_2nd = dialog.findViewById(R.id.it_second);
         Button it_hyp = dialog.findViewById(R.id.it_hyp);
 
         it_sin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = SCCalculation.getText().toString();
-                if(s.equals("")){
-                    s = "sin(" + SCResult.getText().toString() +")";
-                    SCCalculation.setText(s);
-                    double d = eval(s);
-                    input = s;
-                    SCResult.setText(Double.toString(d));
-                }else {
-                    if (s.lastIndexOf("=") > 0) {
-                        s = "sin(" + input + ")";
-                        input = s;
-                    } else if (s.charAt(s.length() - 1) != ')') {
-                        String temp = "sin(" + SCResult.getText().toString() + ")";
-                        s += temp;
-                        input = temp;
-                    } else {
-                        s = s.substring(0, s.length() - input.length());
-                        s += "sin(" + input + ")";
-                        input = "sin(" + input + ")";
+                if(!secFlag){
+                    if(!hypFlag){
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "sin(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "sin(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "sin(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "sin(" + input + ")";
+                                input = "sin(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                    }else{
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "sinh(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "sinh(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "sinh(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "sinh(" + input + ")";
+                                input = "sinh(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        hypFlag = false;
+                        changeTrigoSec();
                     }
-                    SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                }else{
+                    if(!hypFlag){
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "arcsin(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arcsin(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arcsin(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arcsin(" + input + ")";
+                                input = "arcsin(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        secFlag = false;
+                        changeTrigoSec();
+                    }else{
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "arcsinh(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arcsinh(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arcsinh(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arcsinh(" + input + ")";
+                                input = "arcsinh(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        secFlag = false;
+                        hypFlag = false;
+                        changeTrigoSec();
+                    }
                 }
-                flag = true;
             }
         });
 
         it_cos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = SCCalculation.getText().toString();
-                if(s.equals("")){
-                    s = "cos(" + SCResult.getText().toString() +")";
-                    SCCalculation.setText(s);
-                    double d = eval(s);
-                    input = s;
-                    SCResult.setText(Double.toString(d));
-                }else {
-                    if (s.lastIndexOf("=") > 0) {
-                        s = "cos(" + input + ")";
-                        input = s;
-                    } else if (s.charAt(s.length() - 1) != ')') {
-                        String temp = "cos(" + SCResult.getText().toString() + ")";
-                        s += temp;
-                        input = temp;
-                    } else {
-                        s = s.substring(0, s.length() - input.length());
-                        s += "cos(" + input + ")";
-                        input = "cos(" + input + ")";
+                if(!secFlag){
+                    if(!hypFlag){
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "cos(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "cos(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "cos(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "cos(" + input + ")";
+                                input = "cos(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                    }else {
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "cosh(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "cosh(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "cosh(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "cosh(" + input + ")";
+                                input = "cosh(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        hypFlag = false;
+                        changeTrigoSec();
                     }
-                    SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                }else{
+                    if(!hypFlag){
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "arccos(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arccos(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arccos(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arccos(" + input + ")";
+                                input = "arccos(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        secFlag = false;
+                        changeTrigoSec();
+                    }else{
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "arccosh(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arccosh(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arccosh(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arccosh(" + input + ")";
+                                input = "arccosh(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        hypFlag = false;
+                        secFlag = false;
+                        changeTrigoSec();
+                    }
                 }
-                flag = true;
             }
         });
 
         it_tan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = SCCalculation.getText().toString();
-                if(s.equals("")){
-                    s = "tan(" + SCResult.getText().toString() +")";
-                    SCCalculation.setText(s);
-                    double d = eval(s);
-                    input = s;
-                    SCResult.setText(Double.toString(d));
-                }else {
-                    if (s.lastIndexOf("=") > 0) {
-                        s = "tan(" + input + ")";
-                        input = s;
-                    } else if (s.charAt(s.length() - 1) != ')') {
-                        String temp = "tan(" + SCResult.getText().toString() + ")";
-                        s += temp;
-                        input = temp;
-                    } else {
-                        s = s.substring(0, s.length() - input.length());
-                        s += "tan(" + input + ")";
-                        input = "tan(" + input + ")";
+                if(!secFlag){
+                    if(!hypFlag){
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "tan(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "tan(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "tan(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "tan(" + input + ")";
+                                input = "tan(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                    }else{
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "tanh(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "tanh(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "tanh(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "tanh(" + input + ")";
+                                input = "tanh(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        hypFlag = false;
+                        changeTrigoSec();
                     }
-                    SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                }else{
+                    if(!hypFlag){
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "arctan(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arctan(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arctan(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arctan(" + input + ")";
+                                input = "arctan(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        secFlag = false;
+                        changeTrigoSec();
+                    }else{
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "arctanh(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arctanh(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arctanh(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arctanh(" + input + ")";
+                                input = "arctanh(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        secFlag = false;
+                        hypFlag = false;
+                        changeTrigoSec();
+                    }
                 }
-                flag = true;
             }
         });
 
         it_cot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = SCCalculation.getText().toString();
-                if(s.equals("")){
-                    s = "cot(" + SCResult.getText().toString() +")";
-                    SCCalculation.setText(s);
-                    double d = eval(s);
-                    input = s;
-                    SCResult.setText(Double.toString(d));
-                }else {
-                    if (s.lastIndexOf("=") > 0) {
-                        s = "cot(" + input + ")";
-                        input = s;
-                    } else if (s.charAt(s.length() - 1) != ')') {
-                        String temp = "cot(" + SCResult.getText().toString() + ")";
-                        s += temp;
-                        input = temp;
-                    } else {
-                        s = s.substring(0, s.length() - input.length());
-                        s += "cot(" + input + ")";
-                        input = "cot(" + input + ")";
+                if(!secFlag){
+                    if(!hypFlag){
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "cot(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "cot(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "cot(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "cot(" + input + ")";
+                                input = "cot(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                    }else{
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "coth(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "coth(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "coth(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "coth(" + input + ")";
+                                input = "coth(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        hypFlag = false;
+                        changeTrigoSec();
                     }
-                    SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                }else{
+                    if(!hypFlag){
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "arccot(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arccot(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arccot(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arccot(" + input + ")";
+                                input = "arccot(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        secFlag = false;
+                        changeTrigoSec();
+                    }else{
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "arccoth(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arccoth(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arccoth(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arccoth(" + input + ")";
+                                input = "arccoth(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        secFlag = false;
+                        hypFlag = false;
+                        changeTrigoSec();
+                    }
                 }
-                flag = true;
             }
         });
 
@@ -830,75 +1437,289 @@ public class ScienceFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String s = SCCalculation.getText().toString();
-                if(s.equals("")){
-                    s = "csc(" + SCResult.getText().toString() +")";
-                    SCCalculation.setText(s);
-                    double d = eval(s);
-                    input = s;
-                    SCResult.setText(Double.toString(d));
-                }else {
-                    if (s.lastIndexOf("=") > 0) {
-                        s = "csc(" + input + ")";
-                        input = s;
-                    } else if (s.charAt(s.length() - 1) != ')') {
-                        String temp = "csc(" + SCResult.getText().toString() + ")";
-                        s += temp;
-                        input = temp;
-                    } else {
-                        s = s.substring(0, s.length() - input.length());
-                        s += "csc(" + input + ")";
-                        input = "csc(" + input + ")";
+                if(!secFlag){
+                    if(!hypFlag){
+                        if (s.equals("")) {
+                            s = "csc(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "csc(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "csc(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "csc(" + input + ")";
+                                input = "csc(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                    }else{
+                        if (s.equals("")) {
+                            s = "csch(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "csch(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "csch(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "csch(" + input + ")";
+                                input = "csch(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        hypFlag = false;
+                        changeTrigoSec();
                     }
-                    SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                }else{
+                    if(!hypFlag){
+                        if (s.equals("")) {
+                            s = "arccsc(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arccsc(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arccsc(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arccsc(" + input + ")";
+                                input = "arccsc(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(deleteZeroTail(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        secFlag = false;
+                        changeTrigoSec();
+                    }else{
+                        if (s.equals("")) {
+                            s = "arccsch(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(deleteZeroTail(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arccsch(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arccsch(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arccsch(" + input + ")";
+                                input = "arccsch(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(Double.toString(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                    }
                 }
-                flag = true;
             }
         });
 
         it_sec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = SCCalculation.getText().toString();
-                if(s.equals("")){
-                    s = "sec(" + SCResult.getText().toString() +")";
-                    SCCalculation.setText(s);
-                    double d = eval(s);
-                    input = s;
-                    SCResult.setText(Double.toString(d));
-                }else {
-                    if (s.lastIndexOf("=") > 0) {
-                        s = "sec(" + input + ")";
-                        input = s;
-                    } else if (s.charAt(s.length() - 1) != ')') {
-                        String temp = "sec(" + SCResult.getText().toString() + ")";
-                        s += temp;
-                        input = temp;
-                    } else {
-                        s = s.substring(0, s.length() - input.length());
-                        s += "sec(" + input + ")";
-                        input = "sec(" + input + ")";
+                if(!secFlag){
+                    if(!hypFlag){
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "sec(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(Double.toString(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "sec(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "sec(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "sec(" + input + ")";
+                                input = "sec(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(Double.toString(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                    }else{
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "sech(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(Double.toString(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "sech(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "sech(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "sech(" + input + ")";
+                                input = "sech(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(Double.toString(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        hypFlag = false;
                     }
-                    SCCalculation.setText(s);
-                    SCResult.setText(Double.toString(eval(input)));
+                }else{
+                    if(!hypFlag){
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "arcsec(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(Double.toString(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arcsec(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arcsec(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arcsec(" + input + ")";
+                                input = "arcsec(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(Double.toString(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        secFlag = false;
+                    }else{
+                        String s = SCCalculation.getText().toString();
+                        if (s.equals("")) {
+                            s = "arcsech(" + SCResult.getText().toString() + ")";
+                            SCCalculation.setText(s);
+                            double d = eval(s);
+                            input = s;
+                            SCResult.setText(Double.toString(d));
+                        } else {
+                            if (s.lastIndexOf("=") > 0) {
+                                s = "arcsech(" + input + ")";
+                                input = s;
+                            } else if (s.charAt(s.length() - 1) != ')') {
+                                String temp = "arcsech(" + SCResult.getText().toString() + ")";
+                                s += temp;
+                                input = temp;
+                            } else {
+                                s = s.substring(0, s.length() - input.length());
+                                s += "arcsech(" + input + ")";
+                                input = "arcsech(" + input + ")";
+                            }
+                            SCCalculation.setText(s);
+                            SCResult.setText(Double.toString(eval(input)));
+                        }
+                        flag = true;
+                        dialog.dismiss();
+                        hypFlag = false;
+                        secFlag = false;
+                    }
                 }
-                flag = true;
             }
         });
 
         it_2nd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                secFlag = !secFlag;
+                changeTrigoSec();
             }
         });
 
         it_hyp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                hypFlag = !hypFlag;
+                changeTrigoSec();
             }
         });
+        dialog.show();
+    }
+
+    public void changeTrigoSec(){
+        if(secFlag){
+            if(hypFlag){
+                it_sec.setText(R.string.arcsech);
+                it_cos.setText(R.string.arccosh);
+                it_sin.setText(R.string.arcsinh);
+                it_tan.setText(R.string.arctanh);
+                it_csc.setText(R.string.arccsch);
+                it_cot.setText(R.string.arccoth);
+            }else{
+                it_sec.setText(R.string.arcsec);
+                it_cos.setText(R.string.arccos);
+                it_sin.setText(R.string.arcsin);
+                it_tan.setText(R.string.arctan);
+                it_csc.setText(R.string.arccsc);
+                it_cot.setText(R.string.arccot);
+            }
+        }else{
+            if(hypFlag){
+                it_sec.setText(R.string.sech);
+                it_cos.setText(R.string.cosh);
+                it_sin.setText(R.string.sinh);
+                it_tan.setText(R.string.tanh);
+                it_csc.setText(R.string.csch);
+                it_cot.setText(R.string.coth);
+            }else{
+                it_sec.setText(R.string.sec);
+                it_cos.setText(R.string.cos);
+                it_sin.setText(R.string.sin);
+                it_tan.setText(R.string.tan);
+                it_csc.setText(R.string.csc);
+                it_cot.setText(R.string.cot);
+            }
+        }
     }
 
     public static long factorial(long n){
@@ -927,15 +1748,17 @@ public class ScienceFragment extends Fragment {
         if(SCResult.getText().toString().equals("0") || flag ){
             SCResult.setText(s);
             flag = false;
+            input = s;
         }else if(s.equals(".")){
             if(!SCResult.getText().toString().contains(".")) {
                 SCResult.setText(SCResult.getText().toString() + s);
+                input = SCResult.getText().toString();
             }
         }else{
             SCResult.setText(SCResult.getText().toString()+s);
+            input += s;
         }
     }
-
     public int checkPar(String s){
         int closePar = 0,openPar = 0;
         for(int i = 0;i<s.length();++i){
@@ -947,6 +1770,16 @@ public class ScienceFragment extends Fragment {
             }
         }
         return openPar - closePar;
+    }
+
+    private String deleteZeroTail(double d){
+        String s = Double.toString(d);
+        if(s.charAt(s.length()-1) == '0'){
+            if(s.charAt(s.length()-2) == '.'){
+                s = s.substring(0,s.length()-2);
+            }
+        }
+        return s;
     }
 
     private void solve() {
@@ -1001,6 +1834,7 @@ public class ScienceFragment extends Fragment {
                     if      (eat('*')) x *= parseFactor(); // multiplication
                     else if (eat('/')) x /= parseFactor(); // division
                     else if (eat('%')) x %= parseFactor(); // mod
+                    else if (eat('^')) x = Math.pow(x, parseFactor());
                     else return x;
                 }
             }
@@ -1009,11 +1843,13 @@ public class ScienceFragment extends Fragment {
                 if (eat('+')) return parseFactor(); // unary plus
                 if (eat('-')) return -parseFactor(); // unary minus
 
-                double x;
+                double x = 0;
                 int startPos = this.pos;
                 if (eat('(')) { // parentheses
                     x = parseExpression();
                     eat(')');
+                } else if (eat('e')){
+                    x = Math.E;
                 } else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
                     while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
                     x = Double.parseDouble(str.substring(startPos, this.pos));
@@ -1027,17 +1863,25 @@ public class ScienceFragment extends Fragment {
                     else if (func.equals("10^")) x = Math.pow(10,x);
                     else if (func.equals("fac")) x = (double)factorial((long)x);
                     else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
+                    else if (func.equals("sinh")) x = Math.sinh(Math.toRadians(x));
+                    else if (func.equals("arcsin")) x = Math.asin(Math.toRadians(x));
                     else if (func.equals("cos")) x = Math.cos(Math.toRadians(x));
+                    else if (func.equals("cosh")) x = Math.cosh(Math.toRadians(x));
+                    else if (func.equals("arccos")) x = Math.acos(Math.toRadians(x));
                     else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
+                    else if (func.equals("tanh")) x = Math.tanh(Math.toRadians(x));
+                    else if (func.equals("arctan")) x = Math.atan(Math.toRadians(x));
                     else if (func.equals("cot")) x = 1/(Math.tan(Math.toRadians(x)));
                     else if (func.equals("sec")) x = 1/Math.cos(Math.toRadians(x));
                     else if (func.equals("csc")) x = 1/Math.sin(Math.toRadians(x));
                     else if (func.equals("log")) x = Math.log10(x);
                     else if (func.equals("ln")) x = Math.log(x);
+                    else if (func.equals("cube")) x = Math.pow(x,3);
+                    else if (func.equals("cuberoot")) x = Math.cbrt(x);
+                    else if (func.equals("negate")) x = -x;
+
                     else throw new RuntimeException("Unknown function: " + func);
-                } else {
-                    throw new RuntimeException("Unexpected: " + (char)ch);
-                }
+                } else throw new RuntimeException("Unexpected: " + (char)ch);
 
                 if (eat('^')) x = Math.pow(x, parseFactor()); // exponentiation
 
