@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_standard"
+
+            android:title="@string/menu_Standard" />
+        <item
+            android:id="@+id/nav_scientific"
+             
+            android:title="@string/menu_Scientific" />
+        <item
+            android:id="@+id/nav_programmer"
+             
+            android:title="@string/menu_Programmer" />
+        <item
+            android:id="@+id/nav_date"
+             
+            android:title="@string/menu_Date" />
+
+    </group>
+    <group >
+        <item
+            android:id="@+id/nav_currency"
+             
+            android:title="@string/menu_Currency" />
+        <item
+            android:id="@+id/nav_volume"
+             
+            android:title="@string/menu_Volume" />
+        <item
+            android:id="@+id/nav_length"
+             
+            android:title="@string/menu_Length" />
+        <item
+            android:id="@+id/nav_weight"
+             
+            android:title="@string/menu_Weight" />
+
+    </group>
+</menu>
